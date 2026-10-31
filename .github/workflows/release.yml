@@ -1,0 +1,56 @@
+name: Release
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-latest
+            target: aarch64-apple-darwin
+            args: --target aarch64-apple-darwin --bundles dmg
+          - os: macos-latest
+            target: x86_64-apple-darwin
+            args: --target x86_64-apple-darwin --bundles dmg
+          - os: windows-latest
+            target: x86_64-pc-windows-msvc
+            args: --bundles nsis
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+      - uses: Swatinem/rust-cache@v2
+        with:
+          key: ${{ matrix.target }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci
+        working-directory: app
+      - uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          projectPath: app
+          tagName: ${{ github.ref_name }}
+          releaseName: Moonlock ${{ github.ref_name }}
+          releaseBody: |
+            Moonlock — âm lịch cho dev: nhắc rằm, mùng 1, giỗ chạp và tự chặn deploy vào ngày kiêng.
+
+            **Tải về**
+            - macOS Apple Silicon: `Moonlock_*_aarch64.dmg`
+            - macOS Intel: `Moonlock_*_x64.dmg`
+            - Windows: `Moonlock_*_x64-setup.exe`
+
+            Bản build chưa được ký số. macOS: chuột phải vào app → Open ở lần mở đầu tiên. Windows: SmartScreen → More info → Run anyway.
+          releaseDraft: false
+          prerelease: false
+          args: ${{ matrix.args }}

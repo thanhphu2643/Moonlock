@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Moonlock</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="backdrop" aria-hidden="true"></div>
+  <div class="drag" data-tauri-drag-region></div>
+
+  <div class="frame">
+    <!-- Rail -->
+    <nav class="rail" aria-label="Điều hướng">
+      <div class="mark" aria-hidden="true">
+        <svg viewBox="0 0 32 32"><path d="M21.5 4.5A12 12 0 1 0 27.5 21 9.5 9.5 0 0 1 21.5 4.5Z" fill="currentColor"/></svg>
+      </div>
+      <div class="rail-group">
+        <button class="rail-btn active" data-view="day" title="Chi tiết ngày" aria-label="Chi tiết ngày" data-icon="calendar"></button>
+        <button class="rail-btn" data-view="upcoming" title="Sắp tới" aria-label="Sắp tới" data-icon="list"></button>
+        <button class="rail-btn" data-view="gio" title="Giỗ chạp" aria-label="Giỗ chạp" data-icon="flame"></button>
+        <button class="rail-btn" data-view="rules" title="Luật deploy" aria-label="Luật deploy" data-icon="shield"></button>
+      </div>
+      <div class="rail-group bottom">
+        <button class="rail-btn" data-view="ci" title="Tích hợp & CI" aria-label="Tích hợp và CI" data-icon="terminal"></button>
+      </div>
+    </nav>
+
+    <main class="main">
+      <header class="header" data-tauri-drag-region>
+        <div data-tauri-drag-region>
+          <h1 id="greeting">Chào buổi sáng!</h1>
+          <p id="subline" class="sub">…</p>
+        </div>
+        <div class="header-actions">
+          <form id="search" class="search" role="search">
+            <span data-icon="search"></span>
+            <input id="q" placeholder="Tìm ngày âm (15/8) hoặc tên giỗ" autocomplete="off" spellcheck="false" />
+          </form>
+          <button id="bell" class="round" aria-label="Sắp tới" data-icon="bell"><i id="bell-dot" class="badge-dot hidden"></i></button>
+        </div>
+      </header>
+
+      <section class="board">
+        <!-- Calendar -->
+        <div class="cal">
+          <div class="cal-head">
+            <div class="pickers">
+              <label class="picker"><select id="month-sel" aria-label="Tháng"></select><span data-icon="chevronDown"></span></label>
+              <label class="picker"><select id="year-sel" aria-label="Năm"></select><span data-icon="chevronDown"></span></label>
+            </div>
+            <div class="cal-tools">
+              <div class="legend">
+                <span><i class="v block"></i>Cấm</span>
+                <span><i class="v warn"></i>Cẩn thận</span>
+                <span><i class="v ok"></i>Deploy được</span>
+              </div>
+              <button id="prev" class="round sm" aria-label="Tháng trước" data-icon="chevronLeft"></button>
+              <button id="next" class="round sm" aria-label="Tháng sau" data-icon="chevronRight"></button>
+            </div>
+          </div>
+          <div class="weekdays">
+            <span>Thứ Hai</span><span>Thứ Ba</span><span>Thứ Tư</span><span>Thứ Năm</span><span>Thứ Sáu</span><span>Thứ Bảy</span><span>Chủ Nhật</span>
+          </div>
+          <div id="grid" class="grid"></div>
+
+          <!-- Popover: thêm giỗ -->
+          <div id="pop" class="pop hidden" role="dialog" aria-modal="true" aria-labelledby="pop-title">
+            <form id="gio-form">
+              <div class="pop-head">
+                <h2 id="pop-title">Thêm ngày giỗ</h2>
+                <button type="button" class="icon-btn" id="pop-close" aria-label="Đóng" data-icon="x"></button>
+              </div>
+              <div class="pop-row"><span class="k">Lần tới</span><span class="val" id="pop-solar">—</span></div>
+              <div class="pop-row">
+                <span class="k">Âm lịch</span>
+                <div class="steppers">
+                  <div class="stepper">
+                    <button type="button" data-step="day:-1" aria-label="Lùi ngày" data-icon="chevronLeft"></button>
+                    <output id="pop-day">1</output>
+                    <button type="button" data-step="day:1" aria-label="Tiến ngày" data-icon="chevronRight"></button>
+                  </div>
+                  <span class="slash">/</span>
+                  <div class="stepper">
+                    <button type="button" data-step="month:-1" aria-label="Lùi tháng" data-icon="chevronLeft"></button>
+                    <output id="pop-month">1</output>
+                    <button type="button" data-step="month:1" aria-label="Tiến tháng" data-icon="chevronRight"></button>
+                  </div>
+                </div>
+              </div>
+              <div class="pop-row"><span class="k">Giỗ ai</span><input name="name" placeholder="Ví dụ: Ông nội" required maxlength="60" /></div>
+              <div class="pop-row"><span class="k">Ghi chú</span><input name="note" placeholder="Thêm ghi chú" maxlength="120" /></div>
+              <div class="pop-foot"><button type="submit" class="btn-primary">Lưu</button></div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Side panel -->
+        <aside class="side">
+          <div class="side-head">
+            <div>
+              <h2 id="side-title">Hôm nay</h2>
+              <p id="side-sub" class="sub sm">—</p>
+            </div>
+            <div class="side-tools" id="day-tools">
+              <button id="go-today" class="round sm" aria-label="Về hôm nay" data-icon="calendar"></button>
+              <button id="day-prev" class="round sm" aria-label="Ngày trước" data-icon="chevronLeft"></button>
+              <button id="day-next" class="round sm" aria-label="Ngày sau" data-icon="chevronRight"></button>
+            </div>
+          </div>
+          <div class="side-body" id="side-body"></div>
+        </aside>
+      </section>
+    </main>
+  </div>
+
+  <script src="main.js"></script>
+</body>
+</html>

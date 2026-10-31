@@ -1,0 +1,14 @@
+moonlock — âm lịch cho dev 🌙
+
+  moonlock [today] [--date YYYY-MM-DD]       Xem ngày âm, can chi, hoàng/hắc đạo, có deploy được không
+  moonlock month [YYYY-MM]                   Lịch tháng (⛔ cấm, ⚠ cẩn thận)
+  moonlock upcoming [--days 60]              Rằm, mùng 1, giỗ, lễ sắp tới
+  moonlock deploy-check [--date ..] [--strict]
+                                           Exit 1 nếu ngày kiêng (dùng trong CI)
+  moonlock ics [--days 365] [-o file.ics]    Xuất lịch chặn deploy + nhắc giỗ ra iCalendar
+  moonlock lunar 15/8[/2026] [--leap]        Đổi ngày âm → dương
+  moonlock init                              Tạo .moonlock.toml mẫu
+  moonlock config                            In cấu hình đang dùng
+
+Tuỳ chọn chung: --config <file> (mặc định tìm .moonlock.toml từ thư mục hiện tại trở lên)
+Khẩn cấp: MOONLOCK_ALLOW_DEPLOY="đã thắp hương xin phép" moonlock deploy-check

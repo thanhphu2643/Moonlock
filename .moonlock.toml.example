@@ -1,0 +1,19 @@
+# Copy thành .moonlock.toml ở root repo. `moonlock deploy-check` sẽ tự tìm file này.
+# Rules: mung_mot, ram, tam_nuong, nguyet_ky, hac_dao, gio, tet, le_lon, friday, weekend
+timezone = 7.0
+remind_days_before = 1
+
+[deploy]
+block = ["mung_mot", "ram", "tam_nuong", "nguyet_ky", "gio", "tet"]
+warn = ["hac_dao", "le_lon", "friday"]
+
+[[gio]]
+name = "Ông nội"
+day = 12
+month = 3
+
+[[gio]]
+name = "Bà ngoại"
+day = 30
+month = 8
+note = "Tháng thiếu thì cúng ngày 29"

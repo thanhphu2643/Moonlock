@@ -1,0 +1,15 @@
+[package]
+name = "moonlock-cli"
+description = "CLI: xem âm lịch & chặn deploy vào ngày kiêng"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[[bin]]
+name = "moonlock"
+path = "src/main.rs"
+
+[dependencies]
+moonlock-core.workspace = true

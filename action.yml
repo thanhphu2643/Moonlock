@@ -1,0 +1,32 @@
+name: "moonlock deploy-check"
+description: "Chặn deploy vào ngày kiêng âm lịch (rằm, mùng 1, Tam Nương, Nguyệt Kỵ, giỗ, Tết…)"
+branding:
+  icon: moon
+  color: yellow
+inputs:
+  config:
+    description: "Đường dẫn file cấu hình (mặc định tìm .moonlock.toml)"
+    required: false
+    default: ""
+  strict:
+    description: "Chặn luôn cả ngày 'cảnh báo'"
+    required: false
+    default: "false"
+  date:
+    description: "Kiểm tra ngày cụ thể YYYY-MM-DD (mặc định hôm nay, giờ VN)"
+    required: false
+    default: ""
+runs:
+  using: composite
+  steps:
+    - name: Install moonlock
+      shell: bash
+      run: cargo install --locked --quiet --path "${{ github.action_path }}/crates/moonlock-cli" --root "${{ runner.temp }}/moonlock"
+    - name: Check lunar calendar
+      shell: bash
+      run: |
+        args=()
+        [ -n "${{ inputs.config }}" ] && args+=(--config "${{ inputs.config }}")
+        [ -n "${{ inputs.date }}" ] && args+=(--date "${{ inputs.date }}")
+        [ "${{ inputs.strict }}" = "true" ] && args+=(--strict)
+        "${{ runner.temp }}/moonlock/bin/moonlock" deploy-check "${args[@]}"
