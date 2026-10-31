@@ -1,0 +1,480 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		2A49A34A7FC038FFFC046EA7 /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ECDE8ED9DA5CBC2FACC7E007 /* Metal.framework */; };
+		2E2F04B77EEC8C178A1EA073 /* MetalKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D26F8AB1CB6C1CEE2B1F7407 /* MetalKit.framework */; };
+		31ADD7EC7457E5518578DB02 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 689FA375CF2F20B385E37481 /* UIKit.framework */; };
+		342FFBEDB5B41E3A419DC145 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A240722D91CC863CCB3C3F2B /* QuartzCore.framework */; };
+		61F3A9571FC1A2AD814713DA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 43B43016D955F7CF43C6F1C8 /* Assets.xcassets */; };
+		88BCCBD75A3966AA2D523652 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC351151A95A696CE5EF5EDC /* Security.framework */; };
+		9302B7D60D50AC5448D48C89 /* assets in Resources */ = {isa = PBXBuildFile; fileRef = 4AFFD293FA108A937C2952F5 /* assets */; };
+		B80A422F6E6794B5A501A588 /* libapp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EB6B8A2AD02E596FB6C6E6C3 /* libapp.a */; };
+		D8FB3E6457698E46C0D322E6 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C409285DB86679B57B238503 /* WebKit.framework */; };
+		DA9C42ED27DF8919AF46A56D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E5C3A916CBA36F64F2A1770 /* CoreGraphics.framework */; };
+		EB0034D9625B6B0741D9FBCA /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 74C4CE19C05286F218E8AC95 /* main.mm */; };
+		F8B21E849952F67A64ADBA99 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9063FBCD3126A43A9B3A3EB5 /* LaunchScreen.storyboard */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		142955B9859B23A2DCFDCC2D /* desktop.rs */ = {isa = PBXFileReference; path = desktop.rs; sourceTree = "<group>"; };
+		3831A6042A50200B06E344CF /* moonlock-app_iOS.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = "moonlock-app_iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		43B43016D955F7CF43C6F1C8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		4AFFD293FA108A937C2952F5 /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = assets; sourceTree = SOURCE_ROOT; };
+		5539B0BC2A7571AFDE08EB8C /* bindings.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = bindings.h; sourceTree = "<group>"; };
+		5E5C3A916CBA36F64F2A1770 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		63DE21C37C8A850E1EA19DA2 /* main.rs */ = {isa = PBXFileReference; path = main.rs; sourceTree = "<group>"; };
+		689FA375CF2F20B385E37481 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		74C4CE19C05286F218E8AC95 /* main.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = main.mm; sourceTree = "<group>"; };
+		847673780804DAC8555DC898 /* lib.rs */ = {isa = PBXFileReference; path = lib.rs; sourceTree = "<group>"; };
+		9063FBCD3126A43A9B3A3EB5 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		95EF985346ED992BADCC39D6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		A240722D91CC863CCB3C3F2B /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		BC351151A95A696CE5EF5EDC /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		C409285DB86679B57B238503 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
+		D26F8AB1CB6C1CEE2B1F7407 /* MetalKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MetalKit.framework; path = System/Library/Frameworks/MetalKit.framework; sourceTree = SDKROOT; };
+		D354438AB90B8680BB18C05D /* moonlock-app_iOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "moonlock-app_iOS.entitlements"; sourceTree = "<group>"; };
+		EB6B8A2AD02E596FB6C6E6C3 /* libapp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libapp.a; sourceTree = "<group>"; };
+		ECDE8ED9DA5CBC2FACC7E007 /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
+		EE11F72CD5CDE059124D1036 /* mobile.rs */ = {isa = PBXFileReference; path = mobile.rs; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		7381823D600E4ECA26A3E4BD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B80A422F6E6794B5A501A588 /* libapp.a in Frameworks */,
+				DA9C42ED27DF8919AF46A56D /* CoreGraphics.framework in Frameworks */,
+				2A49A34A7FC038FFFC046EA7 /* Metal.framework in Frameworks */,
+				2E2F04B77EEC8C178A1EA073 /* MetalKit.framework in Frameworks */,
+				342FFBEDB5B41E3A419DC145 /* QuartzCore.framework in Frameworks */,
+				88BCCBD75A3966AA2D523652 /* Security.framework in Frameworks */,
+				31ADD7EC7457E5518578DB02 /* UIKit.framework in Frameworks */,
+				D8FB3E6457698E46C0D322E6 /* WebKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0E6B3BEC76C2AA7336B7C56F /* moonlock-app_iOS */ = {
+			isa = PBXGroup;
+			children = (
+				95EF985346ED992BADCC39D6 /* Info.plist */,
+				D354438AB90B8680BB18C05D /* moonlock-app_iOS.entitlements */,
+			);
+			path = "moonlock-app_iOS";
+			sourceTree = "<group>";
+		};
+		4FF898823F635752F54B4907 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				5E5C3A916CBA36F64F2A1770 /* CoreGraphics.framework */,
+				EB6B8A2AD02E596FB6C6E6C3 /* libapp.a */,
+				ECDE8ED9DA5CBC2FACC7E007 /* Metal.framework */,
+				D26F8AB1CB6C1CEE2B1F7407 /* MetalKit.framework */,
+				A240722D91CC863CCB3C3F2B /* QuartzCore.framework */,
+				BC351151A95A696CE5EF5EDC /* Security.framework */,
+				689FA375CF2F20B385E37481 /* UIKit.framework */,
+				C409285DB86679B57B238503 /* WebKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		5C2EB1FDFB56EC54CE26C4C2 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				D659886055DB14C92A80B814 /* moonlock-app */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		67A4834769B6291DED79750E /* Externals */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Externals;
+			sourceTree = "<group>";
+		};
+		C91C748A39FB8313013F90F3 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3831A6042A50200B06E344CF /* moonlock-app_iOS.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		CC0593C0FB1D5D78238F47FB /* bindings */ = {
+			isa = PBXGroup;
+			children = (
+				5539B0BC2A7571AFDE08EB8C /* bindings.h */,
+			);
+			path = bindings;
+			sourceTree = "<group>";
+		};
+		D659886055DB14C92A80B814 /* moonlock-app */ = {
+			isa = PBXGroup;
+			children = (
+				74C4CE19C05286F218E8AC95 /* main.mm */,
+				CC0593C0FB1D5D78238F47FB /* bindings */,
+			);
+			path = "moonlock-app";
+			sourceTree = "<group>";
+		};
+		EFE593CE69DD3E18F93ECEEA = {
+			isa = PBXGroup;
+			children = (
+				4AFFD293FA108A937C2952F5 /* assets */,
+				43B43016D955F7CF43C6F1C8 /* Assets.xcassets */,
+				9063FBCD3126A43A9B3A3EB5 /* LaunchScreen.storyboard */,
+				67A4834769B6291DED79750E /* Externals */,
+				0E6B3BEC76C2AA7336B7C56F /* moonlock-app_iOS */,
+				5C2EB1FDFB56EC54CE26C4C2 /* Sources */,
+				FB31C26F50518299A87F2AD0 /* src */,
+				4FF898823F635752F54B4907 /* Frameworks */,
+				C91C748A39FB8313013F90F3 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		FB31C26F50518299A87F2AD0 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				142955B9859B23A2DCFDCC2D /* desktop.rs */,
+				847673780804DAC8555DC898 /* lib.rs */,
+				63DE21C37C8A850E1EA19DA2 /* main.rs */,
+				EE11F72CD5CDE059124D1036 /* mobile.rs */,
+			);
+			name = src;
+			path = ../../src;
+			sourceTree = "<group>";
+		};
+		"TEMP_7F6E4AC0-B932-440F-9368-C0F4659FA964" /* arm64 */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = arm64;
+			sourceTree = "<group>";
+		};
+		"TEMP_A97EDE4D-4BD7-4C87-976A-9DB8C670213F" /* x86_64 */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = x86_64;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		EA73FC663DD4E628BF44789F /* moonlock-app_iOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AD85D270240210C603B9388F /* Build configuration list for PBXNativeTarget "moonlock-app_iOS" */;
+			buildPhases = (
+				D7673E6848C02E0031D4EC34 /* Build Rust Code */,
+				841C918621CE259D27CB15DA /* Sources */,
+				6F5F81B8A278A8035C139D45 /* Resources */,
+				7381823D600E4ECA26A3E4BD /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "moonlock-app_iOS";
+			packageProductDependencies = (
+			);
+			productName = "moonlock-app_iOS";
+			productReference = 3831A6042A50200B06E344CF /* moonlock-app_iOS.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		779370D8BCD926170F3E1178 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+				};
+			};
+			buildConfigurationList = C8D101BD1AEF46988F8E690C /* Build configuration list for PBXProject "moonlock-app" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = EFE593CE69DD3E18F93ECEEA;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = C91C748A39FB8313013F90F3 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				EA73FC663DD4E628BF44789F /* moonlock-app_iOS */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		6F5F81B8A278A8035C139D45 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				61F3A9571FC1A2AD814713DA /* Assets.xcassets in Resources */,
+				F8B21E849952F67A64ADBA99 /* LaunchScreen.storyboard in Resources */,
+				9302B7D60D50AC5448D48C89 /* assets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		D7673E6848C02E0031D4EC34 /* Build Rust Code */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Build Rust Code";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(SRCROOT)/Externals/x86_64/${CONFIGURATION}/libapp.a",
+				"$(SRCROOT)/Externals/arm64/${CONFIGURATION}/libapp.a",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "npm run -- tauri ios xcode-script -v --platform \"${PLATFORM_DISPLAY_NAME:?}\" --sdk-root \"${SDKROOT:?}\" --framework-search-paths \"${FRAMEWORK_SEARCH_PATHS:?}\" --header-search-paths \"${HEADER_SEARCH_PATHS:?}\" --gcc-preprocessor-definitions \"${GCC_PREPROCESSOR_DEFINITIONS:-}\" --configuration \"${CONFIGURATION:?}\" ${FORCE_COLOR} ${ARCHS:?}\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		841C918621CE259D27CB15DA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EB0034D9625B6B0741D9FBCA /* main.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		48E5226695EE1F2D1CF93C03 /* debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = debug;
+		};
+		54018BA176FD0D7078D136ED /* debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ARCHS = (
+					arm64,
+				);
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "moonlock-app_iOS/moonlock-app_iOS.entitlements";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				ENABLE_BITCODE = NO;
+				"EXCLUDED_ARCHS[sdk=iphoneos*]" = x86_64;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\".\"",
+				);
+				INFOPLIST_FILE = "moonlock-app_iOS/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				"LIBRARY_SEARCH_PATHS[arch=arm64]" = "$(inherited) $(PROJECT_DIR)/Externals/arm64/$(CONFIGURATION) $(SDKROOT)/usr/lib/swift $(DEVELOPER_DIR)/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/$(PLATFORM_NAME) $(DEVELOPER_DIR)/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift-5.0/$(PLATFORM_NAME)";
+				"LIBRARY_SEARCH_PATHS[arch=x86_64]" = "$(inherited) $(PROJECT_DIR)/Externals/x86_64/$(CONFIGURATION) $(SDKROOT)/usr/lib/swift $(DEVELOPER_DIR)/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/$(PLATFORM_NAME) $(DEVELOPER_DIR)/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift-5.0/$(PLATFORM_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = io.github.thanhphu2643.moonlock;
+				PRODUCT_NAME = "Moonlock";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALID_ARCHS = arm64;
+				DEVELOPMENT_TEAM = "76F36UC72K";
+			};
+			name = debug;
+		};
+		71153E35A03147FCA6FEE35A /* release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = release;
+		};
+		C434852EB13C21CF7993615C /* release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ARCHS = (
+					arm64,
+				);
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "moonlock-app_iOS/moonlock-app_iOS.entitlements";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				ENABLE_BITCODE = NO;
+				"EXCLUDED_ARCHS[sdk=iphoneos*]" = x86_64;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\".\"",
+				);
+				INFOPLIST_FILE = "moonlock-app_iOS/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				"LIBRARY_SEARCH_PATHS[arch=arm64]" = "$(inherited) $(PROJECT_DIR)/Externals/arm64/$(CONFIGURATION) $(SDKROOT)/usr/lib/swift $(DEVELOPER_DIR)/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/$(PLATFORM_NAME) $(DEVELOPER_DIR)/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift-5.0/$(PLATFORM_NAME)";
+				"LIBRARY_SEARCH_PATHS[arch=x86_64]" = "$(inherited) $(PROJECT_DIR)/Externals/x86_64/$(CONFIGURATION) $(SDKROOT)/usr/lib/swift $(DEVELOPER_DIR)/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/$(PLATFORM_NAME) $(DEVELOPER_DIR)/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift-5.0/$(PLATFORM_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = io.github.thanhphu2643.moonlock;
+				PRODUCT_NAME = "Moonlock";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALID_ARCHS = arm64;
+				DEVELOPMENT_TEAM = "76F36UC72K";
+			};
+			name = release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		AD85D270240210C603B9388F /* Build configuration list for PBXNativeTarget "moonlock-app_iOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				54018BA176FD0D7078D136ED /* debug */,
+				C434852EB13C21CF7993615C /* release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = debug;
+		};
+		C8D101BD1AEF46988F8E690C /* Build configuration list for PBXProject "moonlock-app" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				48E5226695EE1F2D1CF93C03 /* debug */,
+				71153E35A03147FCA6FEE35A /* release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 779370D8BCD926170F3E1178 /* Project object */;
+}

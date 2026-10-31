@@ -329,3 +329,140 @@ svg { display: block; }
   .search { width: 260px; }
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+
+/* ───────────────────────── Phone (iOS / Android) ───────────────────────── */
+@media (max-width: 760px) {
+  :root { --tabbar: 68px; }
+  body { overflow-y: auto; -webkit-tap-highlight-color: transparent; user-select: none; }
+  .drag { display: none; }
+  .frame {
+    position: static; display: block; min-height: 100vh;
+    border: 0; border-radius: 0; box-shadow: none; overflow: visible;
+    background: linear-gradient(180deg, rgba(44, 51, 64, 0.97), rgba(36, 43, 55, 0.97));
+    padding: calc(env(safe-area-inset-top) + 10px) 0 calc(var(--tabbar) + env(safe-area-inset-bottom) + 16px);
+  }
+
+  /* iOS draws the system tab bar natively (see NativeTabBar.swift) */
+  .native-tabbar .rail { display: none; }
+  .native-tabbar .frame { padding-bottom: calc(env(safe-area-inset-bottom) + 96px); }
+
+  /* Rail → floating liquid-glass tab bar */
+  .rail {
+    --b: 56px; --gap: 4px; --pad: 6px;
+    position: fixed; z-index: 30; left: 50%; bottom: calc(env(safe-area-inset-bottom) + 10px);
+    transform: translateX(-50%);
+    flex-direction: row; justify-content: center; gap: var(--gap); padding: var(--pad);
+    border-radius: 999px;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.05) 55%, rgba(255, 255, 255, 0.09));
+    -webkit-backdrop-filter: blur(22px) saturate(180%); backdrop-filter: blur(22px) saturate(180%);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.35),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.08),
+      inset 0 0 0 0.5px rgba(255, 255, 255, 0.18),
+      0 12px 36px rgba(5, 10, 20, 0.45);
+  }
+  /* The sliding glass drop behind the active tab */
+  .rail::before {
+    content: ""; position: absolute; top: var(--pad); left: var(--pad);
+    width: var(--b); height: var(--b); border-radius: 999px;
+    transform: translateX(calc(var(--i, 0) * (var(--b) + var(--gap))));
+    background: radial-gradient(120% 90% at 50% 0%, rgba(140, 185, 255, 0.45), rgba(80, 140, 255, 0.18) 60%, rgba(80, 140, 255, 0.1));
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45), inset 0 0 0 0.5px rgba(170, 205, 255, 0.4), 0 6px 18px rgba(59, 130, 246, 0.35);
+    transition: transform 0.45s cubic-bezier(0.34, 1.4, 0.5, 1);
+  }
+  .mark { display: none; }
+  .rail-group, .rail-group.bottom {
+    flex-direction: row; gap: var(--gap); padding: 0; margin: 0; background: none; border: 0;
+  }
+  .rail-btn {
+    position: relative; width: var(--b); height: var(--b);
+    background: none; color: rgba(235, 240, 250, 0.72);
+    transition: color 0.3s, transform 0.25s cubic-bezier(0.34, 1.4, 0.5, 1);
+  }
+  .rail-btn:hover { background: none; }
+  .rail-btn:active { transform: scale(0.88); }
+  .rail-btn.active { background: none; box-shadow: none; color: #fff; }
+  .rail-btn svg { width: 22px; height: 22px; }
+
+  /* Softer surfaces */
+  button { transition: transform 0.2s cubic-bezier(0.34, 1.4, 0.5, 1), background 0.2s; }
+  .round, .search {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+    border-color: transparent;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 4px 14px rgba(5, 10, 20, 0.18);
+  }
+  .round:active, .chipbtn:active, .btn-primary:active, .btn-ghost:active { transform: scale(0.92); }
+  .cell {
+    border-color: transparent; border-radius: 16px;
+    background: rgba(255, 255, 255, 0.045);
+    transition: transform 0.2s cubic-bezier(0.34, 1.4, 0.5, 1), background 0.2s;
+  }
+  .cell:active { transform: scale(0.93); background: rgba(255, 255, 255, 0.09); }
+  .cell.out { opacity: 0.35; background: transparent; }
+  .cell.today, .cell.today.selected {
+    border: 0;
+    background: linear-gradient(180deg, #4b8df5, #2f6fde);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 8px 20px rgba(59, 130, 246, 0.4);
+  }
+  .cell.selected { border: 0; background: rgba(59, 130, 246, 0.2); box-shadow: inset 0 0 0 1.5px rgba(91, 154, 255, 0.55); }
+  .card { border-color: transparent; border-radius: 20px; background: rgba(255, 255, 255, 0.05); }
+  .card .row, .rule { border-top-style: solid; border-top-color: var(--hair); }
+
+  .main { padding: 6px 16px 0; gap: 16px; }
+  .header { flex-wrap: wrap; padding: 0; gap: 12px; }
+  .header > div:first-child { flex: 1; min-width: 0; }
+  .header h1 { font-size: 23px; }
+  .sub { font-size: 13.5px; line-height: 1.5; }
+  .header-actions { width: 100%; order: 2; }
+  .search { flex: 1; width: auto; height: 46px; }
+  .round { width: 46px; height: 46px; }
+
+  .board { display: block; background: none; border: 0; }
+  .cal { padding: 0; }
+  .cal-head { padding: 0 2px 10px; }
+  .pickers { gap: 14px; }
+  .picker select { font-size: 21px; padding-right: 20px; }
+  .legend { display: none; }
+  .cal-tools { gap: 8px; }
+
+  .weekdays, .grid { gap: 5px; }
+  .weekdays span { font-size: 0; padding: 0 0 6px; text-align: center; }
+  .weekdays span::after { content: attr(data-short); font-size: 11.5px; }
+  .grid { grid-template-rows: none !important; grid-auto-rows: minmax(54px, auto); }
+
+  .cell { padding: 6px 5px 5px; border-radius: 12px; align-items: center; min-height: 54px; }
+  .cell .top { flex-direction: column; align-items: center; gap: 2px; width: 100%; }
+  .cell .num { font-size: 17px; }
+  .cell .lunar { font-size: 10px; gap: 3px; }
+  .cell .lunar .v { display: none; }
+  /* Event lines collapse to colored dots */
+  .cell .lines { flex-direction: row; justify-content: center; gap: 3px; margin-top: auto; padding-top: 3px; }
+  .line { width: 5px; height: 5px; border-radius: 50%; background: var(--c, var(--sky)); font-size: 0; }
+  .line::before, .line.more { display: none; }
+  /* Verdict as a thin underline instead of the dot */
+  .cell::after {
+    content: ""; position: absolute; left: 30%; right: 30%; bottom: 3px; height: 2px; border-radius: 2px;
+    background: var(--vc, transparent); opacity: 0.9;
+  }
+  .cell.block { --vc: var(--red); }
+  .cell.warn { --vc: var(--amber); }
+
+  .side { border: 0; margin-top: 20px; scroll-margin-top: calc(env(safe-area-inset-top) + 8px); }
+  .side-head { padding: 0 2px 4px; }
+  .side-body { overflow: visible; padding: 0 2px; }
+  .card h3 { font-size: 18px; }
+
+  /* Popover → bottom sheet */
+  .pop {
+    position: fixed; z-index: 40; left: 0 !important; right: 0; top: auto !important; bottom: 0;
+    width: auto; border-radius: 28px 28px 0 0; border: 0;
+    padding: 18px 20px calc(18px + env(safe-area-inset-bottom));
+    background: rgba(34, 41, 53, 0.82);
+    -webkit-backdrop-filter: blur(24px) saturate(160%); backdrop-filter: blur(24px) saturate(160%);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14), 0 -20px 60px rgba(0, 0, 0, 0.45);
+  }
+  .pop-row { grid-template-columns: 88px 1fr; min-height: 58px; }
+  .pop-row input { font-size: 16px; } /* ≥16px stops iOS zoom-on-focus */
+  .search input { font-size: 16px; }
+}

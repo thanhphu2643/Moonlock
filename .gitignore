@@ -2,5 +2,5 @@ target/
 node_modules/
 .DS_Store
 *.ics
-app/src-tauri/gen/
+app/src-tauri/gen/schemas/
 .build/
