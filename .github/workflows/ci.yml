@@ -40,3 +40,49 @@ jobs:
         with:
           name: moonlock-${{ matrix.os }}
           path: target/release/bundle/
+
+  android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-linux-android,armv7-linux-androideabi,i686-linux-android,x86_64-linux-android
+      - uses: Swatinem/rust-cache@v2
+        with:
+          key: android
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci
+        working-directory: app
+      - name: Build APK (debug)
+        working-directory: app
+        run: NDK_HOME="$ANDROID_NDK_LATEST_HOME" npx tauri android build --debug --apk --ci
+      - uses: actions/upload-artifact@v4
+        with:
+          name: moonlock-android-debug
+          path: app/src-tauri/gen/android/app/build/outputs/apk/universal/debug/*.apk
+
+  ios:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-apple-ios,aarch64-apple-ios-sim
+      - uses: Swatinem/rust-cache@v2
+        with:
+          key: ios
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci
+        working-directory: app
+      - name: Build IPA (unsigned)
+        working-directory: app
+        run: npx tauri ios build --debug --target aarch64 --no-sign --ci

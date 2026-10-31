@@ -31,7 +31,7 @@ private func requestAccess(_ store: EKEventStore) -> Bool {
         granted = ok
         done.signal()
     }
-    if #available(macOS 14.0, *) {
+    if #available(macOS 14.0, iOS 17.0, *) {
         store.requestFullAccessToEvents(completion: completion)
     } else {
         store.requestAccess(to: .event, completion: completion)

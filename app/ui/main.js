@@ -50,6 +50,8 @@ const VIEWS = {
   ci: ["Tích hợp", "CI/CD, iCalendar, Apple Calendar"],
 };
 
+const isPhone = () => matchMedia("(max-width: 760px)").matches;
+
 const state = { year: 0, month: 0, cells: [], selected: null, today: null, config: null, rules: [], platform: "", view: "day", pop: null };
 
 const fmtLong = (d) => `${d.day} ${MONTHS[d.month - 1]}, ${d.year}`;
@@ -297,7 +299,7 @@ async function ciView() {
     <div class="divider">Xuất lịch</div>
     <div class="actions">
       <button class="btn-ghost" id="ics" data-icon="download">Export .ics</button>
-      ${state.platform === "macos" ? `<button class="btn-ghost" id="apple" data-icon="calendar">Apple Calendar</button>` : ""}
+      ${["macos", "ios"].includes(state.platform) ? `<button class="btn-ghost" id="apple" data-icon="calendar">Apple Calendar</button>` : ""}
     </div>
     <div class="toast" id="toast"></div>
     <div class="divider">.moonlock.toml</div>
@@ -365,7 +367,12 @@ async function refresh() {
 
 function setView(v) {
   state.view = v;
-  $$(".rail-btn").forEach((b) => b.classList.toggle("active", b.dataset.view === v));
+  $$(".rail-btn").forEach((b, i) => {
+    b.classList.toggle("active", b.dataset.view === v);
+    if (b.dataset.view !== v) return;
+    $(".rail").style.setProperty("--i", i);
+    if (state.nativeTabs) invoke("native_tab_select", { index: i });
+  });
   renderSide();
 }
 
@@ -395,7 +402,11 @@ async function search(q) {
 
 // ── Wiring ──
 function wire() {
-  $$(".rail-btn").forEach((b) => (b.onclick = () => setView(b.dataset.view)));
+  $$(".rail-btn").forEach((b) => (b.onclick = () => {
+    setView(b.dataset.view);
+    // On phones the panel sits below the calendar: bring it into view (or back to the top for "day").
+    if (isPhone()) b.dataset.view === "day" ? scrollTo({ top: 0, behavior: "smooth" }) : $(".side").scrollIntoView({ behavior: "smooth", block: "start" });
+  }));
   $("#bell").onclick = () => setView("upcoming");
   $("#prev").onclick = () => { state.month === 1 ? (state.year--, (state.month = 12)) : state.month--; loadMonth(); };
   $("#next").onclick = () => { state.month === 12 ? (state.year++, (state.month = 1)) : state.month++; loadMonth(); };
@@ -411,7 +422,14 @@ function wire() {
     if (!c) return;
     if (state.view !== "day") setView("day");
     select(c.dataset.date, { reveal: true });
+    if (isPhone()) $(".side").scrollIntoView({ behavior: "smooth", block: "start" });
   });
+  let pressTimer = 0;
+  $("#grid").addEventListener("touchstart", (e) => {
+    const c = e.target.closest(".cell");
+    if (c) pressTimer = setTimeout(() => openPop(c.dataset.date, null), 550);
+  }, { passive: true });
+  ["touchend", "touchmove", "touchcancel"].forEach((t) => $("#grid").addEventListener(t, () => clearTimeout(pressTimer), { passive: true }));
   $("#grid").addEventListener("dblclick", (e) => {
     const c = e.target.closest(".cell");
     if (c) openPop(c.dataset.date, c);
@@ -492,6 +510,17 @@ function wire() {
   });
 }
 
+// iOS: swap the CSS tab bar for the system one (Liquid Glass on iOS 26+).
+const SF_SYMBOLS = { calendar: "calendar", list: "list.bullet", flame: "flame", shield: "checkmark.shield", terminal: "apple.terminal" };
+const TAB_TITLES = { day: "Lịch", upcoming: "Sắp tới", gio: "Giỗ", rules: "Luật", ci: "CI" };
+async function nativeTabs() {
+  const btns = $$(".rail-btn");
+  const tabs = btns.map((b) => ({ title: TAB_TITLES[b.dataset.view] ?? b.title, icon: SF_SYMBOLS[b.dataset.icon] ?? "circle" }));
+  state.nativeTabs = await invoke("native_tabbar", { tabs }).catch(() => false);
+  document.documentElement.classList.toggle("native-tabbar", state.nativeTabs);
+  if (state.nativeTabs) window.__TAURI__.event.listen("native-tab", (e) => setView(btns[e.payload].dataset.view));
+}
+
 // ── Boot ──
 (async () => {
   hydrateIcons();
@@ -499,6 +528,7 @@ function wire() {
   Object.assign(state, { config, rules, platform, today, year: today.year, month: today.month, selected: today.date });
   fillPickers();
   wire();
+  await nativeTabs();
   await refresh();
   setInterval(async () => {
     const t = await invoke("today");

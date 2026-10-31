@@ -14,8 +14,8 @@ crate-type = ["staticlib", "cdylib", "rlib"]
 [build-dependencies]
 tauri-build = { version = "2", features = [] }
 
-# Builds & links the Swift package (swift/MoonlockKit) — macOS only, see build.rs.
-[target.'cfg(target_os = "macos")'.build-dependencies]
+# Builds & links the Swift package (swift/MoonlockKit) for Apple targets — see build.rs.
+[target.'cfg(any(target_os = "macos", target_os = "ios"))'.build-dependencies]
 swift-rs = { version = "1.0.7", features = ["build"] }
 
 [dependencies]
@@ -24,3 +24,6 @@ serde.workspace = true
 serde_json.workspace = true
 tauri = { version = "2", features = ["tray-icon"] }
 tauri-plugin-notification = "2"
+
+[target.'cfg(any(target_os = "android", target_os = "ios"))'.dependencies]
+time = "0.3"
