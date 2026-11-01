@@ -345,6 +345,8 @@ svg { display: block; }
   /* iOS draws the system tab bar natively (see NativeTabBar.swift) */
   .native-tabbar .rail { display: none; }
   .native-tabbar .frame { padding-bottom: calc(env(safe-area-inset-bottom) + 96px); }
+  /* Android shrinks the webview above its Material bar, so no overlap to pad for */
+  .native-tabbar.android .frame { padding-bottom: 16px; }
 
   /* Rail → floating liquid-glass tab bar */
   .rail {

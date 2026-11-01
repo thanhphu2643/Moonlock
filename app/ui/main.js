@@ -47,7 +47,7 @@ const VIEWS = {
   upcoming: ["Sắp tới", "Rằm, mùng 1, giỗ và lễ trong 120 ngày"],
   gio: ["Giỗ chạp", "Tính theo âm lịch, tự lặp mỗi năm"],
   rules: ["Luật deploy", "Áp dụng cho cả app và CLI moonlock"],
-  ci: ["Tích hợp", "CI/CD, iCalendar, Apple Calendar"],
+  ci: ["Tích hợp", "CI/CD, iCalendar, lịch hệ thống"],
 };
 
 const isPhone = () => matchMedia("(max-width: 760px)").matches;
@@ -299,7 +299,7 @@ async function ciView() {
     <div class="divider">Xuất lịch</div>
     <div class="actions">
       <button class="btn-ghost" id="ics" data-icon="download">Export .ics</button>
-      ${["macos", "ios"].includes(state.platform) ? `<button class="btn-ghost" id="apple" data-icon="calendar">Apple Calendar</button>` : ""}
+      ${CAL_NAME[state.platform] ? `<button class="btn-ghost" id="apple" data-icon="calendar">${CAL_NAME[state.platform]}</button>` : ""}
     </div>
     <div class="toast" id="toast"></div>
     <div class="divider">.moonlock.toml</div>
@@ -461,8 +461,8 @@ function wire() {
       catch (err) { toast(`Lỗi: ${err}`); }
     }
     if (t.id === "apple") {
-      toast("Đang ghi vào Apple Calendar. Lần đầu macOS sẽ hỏi quyền truy cập Lịch.");
-      try { toast(`Đã thêm ${await invoke("sync_apple_calendar", { days: 365 })} sự kiện vào lịch "Moonlock".`); }
+      toast(`Đang ghi vào ${CAL_NAME[state.platform]}. Lần đầu máy sẽ hỏi quyền truy cập Lịch.`);
+      try { toast(`Đã thêm ${await invoke("sync_calendar", { days: 365 })} sự kiện vào lịch "Moonlock".`); }
       catch (err) { toast(String(err)); }
     }
     if (t.id === "copy-toml") {
@@ -510,15 +510,34 @@ function wire() {
   });
 }
 
-// iOS: swap the CSS tab bar for the system one (Liquid Glass on iOS 26+).
+// Native calendar sync per platform (Swift/EventKit on Apple, CalendarContract on Android).
+const CAL_NAME = { macos: "Apple Calendar", ios: "Apple Calendar", android: "Lịch Android" };
+
+// Lucide markup → "|"-separated SVG paths (Android draws tab icons from path data).
+const svgPath = (svg) =>
+  [...svg.matchAll(/<(path|rect)\b([^>]*)>/g)].map(([, tag, attrs]) => {
+    const a = Object.fromEntries([...attrs.matchAll(/(\w+)="([^"]*)"/g)].map((m) => [m[1], m[2]]));
+    if (tag === "path") return a.d;
+    const [x, y, w, h, r] = ["x", "y", "width", "height", "rx"].map((k) => +a[k] || 0);
+    return `M${x + r} ${y}h${w - 2 * r}a${r} ${r} 0 0 1 ${r} ${r}v${h - 2 * r}a${r} ${r} 0 0 1 ${-r} ${r}h${-(w - 2 * r)}a${r} ${r} 0 0 1 ${-r} ${-r}v${-(h - 2 * r)}a${r} ${r} 0 0 1 ${r} ${-r}z`;
+  }).join("|"); // parsed separately: a leading "m" is only absolute at the start of a path
+
+// Mobile: swap the CSS tab bar for the system one (Liquid Glass on iOS 26+, Material on Android).
 const SF_SYMBOLS = { calendar: "calendar", list: "list.bullet", flame: "flame", shield: "checkmark.shield", terminal: "apple.terminal" };
 const TAB_TITLES = { day: "Lịch", upcoming: "Sắp tới", gio: "Giỗ", rules: "Luật", ci: "CI" };
 async function nativeTabs() {
   const btns = $$(".rail-btn");
-  const tabs = btns.map((b) => ({ title: TAB_TITLES[b.dataset.view] ?? b.title, icon: SF_SYMBOLS[b.dataset.icon] ?? "circle" }));
+  const tabs = btns.map((b) => ({
+    title: TAB_TITLES[b.dataset.view] ?? b.title,
+    icon: SF_SYMBOLS[b.dataset.icon] ?? "circle",
+    path: svgPath(ICONS[b.dataset.icon] ?? ""),
+  }));
+  // Android's Kotlin side calls this directly; iOS goes through the "native-tab" event.
+  window.__nativeTab = (i) => btns[i].click(); // same path as the CSS rail (incl. scroll-to-panel)
   state.nativeTabs = await invoke("native_tabbar", { tabs }).catch(() => false);
   document.documentElement.classList.toggle("native-tabbar", state.nativeTabs);
-  if (state.nativeTabs) window.__TAURI__.event.listen("native-tab", (e) => setView(btns[e.payload].dataset.view));
+  document.documentElement.classList.toggle("android", state.platform === "android");
+  if (state.nativeTabs) window.__TAURI__.event.listen("native-tab", (e) => window.__nativeTab(e.payload));
 }
 
 // ── Boot ──

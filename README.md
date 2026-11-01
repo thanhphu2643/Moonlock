@@ -27,6 +27,7 @@ $ echo $?
 - **CLI `moonlock`**, dùng làm chốt chặn trong CI/CD: exit 1 vào ngày kiêng, có ghi summary cho GitHub Actions.
 - **Export `.ics`**: ngày cấm deploy (busy) + nhắc lễ/giỗ (có báo trước), import được vào Google/Outlook/Apple Calendar.
 - **Apple Calendar (Swift/EventKit)**: trên macOS và iOS ghi thẳng vào lịch riêng "Moonlock", đồng bộ iCloud sang iPhone/Watch, chạy lại nhiều lần không tạo trùng.
+- **Lịch Android (Kotlin/CalendarContract)**: tương tự trên Android, ghi vào lịch cục bộ "Moonlock" trong máy; `.ics` được lưu vào thư mục Download.
 
 ## Kiến trúc
 
@@ -37,6 +38,7 @@ swift/MoonlockKit      Swift: EventKit → Apple Calendar, export qua C ABI (@_c
 app/src-tauri          Rust: Tauri 2 shell (commands), link Swift qua swift-rs cho target Apple
   src/desktop.rs       tray hiển thị ngày âm + vòng lặp nhắc (desktop)
   src/mobile.rs        lên lịch local notification 45 ngày tới (iOS/Android)
+  src/android.rs       cầu nối Rust ↔ MoonlockPlugin.kt (lịch, Download, tab bar native)
   gen/apple            project Xcode (XcodeGen: project.yml)
   gen/android          project Android Studio (Gradle)
 app/ui                 HTML/CSS/JS thuần, không bundler; responsive cho điện thoại
@@ -131,7 +133,8 @@ Trên iOS, file `.ics` export nằm trong app **Files → Trên iPhone → Moonl
 ## Lộ trình
 
 - [x] iOS/Android qua Tauri 2 mobile
-- [ ] Đồng bộ Google Calendar / lịch hệ thống trên Android (CalendarContract, Kotlin)
+- [x] Đồng bộ lịch hệ thống trên Android (CalendarContract, Kotlin)
+- [ ] Đồng bộ thẳng vào tài khoản Google Calendar
 - [ ] Phát hành TestFlight / Google Play (cần tài khoản developer + ký số)
 - [ ] Widget macOS (WidgetKit, Swift) hiển thị ngày âm + trạng thái deploy
 - [ ] Giờ hoàng đạo (chặn deploy theo giờ)

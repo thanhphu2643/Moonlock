@@ -6,11 +6,14 @@
 //! - macOS + iOS: Apple Calendar sync goes through Swift/EventKit (swift/MoonlockKit).
 //! - Desktop (`desktop.rs`): tray with today's lunar date + polling reminder loop.
 //! - Mobile (`mobile.rs`): reminders are pre-scheduled as OS local notifications.
+//! - Android (`android.rs`): calendar sync, Downloads export and tab bar via a Kotlin plugin.
 
 #[cfg(desktop)]
 mod desktop;
 #[cfg(mobile)]
 mod mobile;
+#[cfg(target_os = "android")]
+mod android;
 
 use moonlock_core::{Config, DayInfo, Verdict};
 use serde::Serialize;
@@ -124,10 +127,22 @@ fn rules() -> Vec<RuleMeta> {
 }
 
 #[tauri::command]
-fn export_ics(app: AppHandle, s: State<AppState>, days: i64) -> CmdResult<String> {
+async fn export_ics(app: AppHandle, s: State<'_, AppState>, days: i64) -> CmdResult<String> {
     let cfg = s.cfg();
     let ics = moonlock_core::build_ics(moonlock_core::today_jd(cfg.timezone), days.clamp(1, 1500), &cfg);
-    // Desktop: ~/Downloads. Mobile: the app's Documents folder (visible in the iOS Files app).
+    // Android: public Downloads via MediaStore (app-private dirs are invisible to the user).
+    #[cfg(target_os = "android")]
+    {
+        #[derive(serde::Deserialize)]
+        struct Saved {
+            path: String,
+        }
+        let saved: Saved = android::call(&app, "saveDownload", serde_json::json!({ "name": "moonlock.ics", "content": ics }))?;
+        Ok(saved.path)
+    }
+    #[cfg(not(target_os = "android"))]
+    {
+    // Desktop: ~/Downloads. iOS: the app's Documents folder (visible in the Files app).
     #[cfg(desktop)]
     let dir = app.path().download_dir().map_err(|e| e.to_string())?;
     #[cfg(mobile)]
@@ -136,6 +151,7 @@ fn export_ics(app: AppHandle, s: State<AppState>, days: i64) -> CmdResult<String
     let path = dir.join("moonlock.ics");
     fs::write(&path, ics).map_err(|e| e.to_string())?;
     Ok(path.display().to_string())
+    }
 }
 
 #[tauri::command]
@@ -143,10 +159,11 @@ fn platform() -> &'static str {
     std::env::consts::OS
 }
 
-/// Push freeze days + reminders into Apple Calendar (macOS/iOS, via Swift/EventKit).
-/// Async so it runs off the main thread: EventKit's permission prompt blocks.
+/// Push freeze days + reminders into the system calendar: Apple Calendar (macOS/iOS, Swift/EventKit)
+/// or the Android calendar provider (Kotlin/CalendarContract).
+/// Async so it runs off the main thread: the permission prompt blocks.
 #[tauri::command]
-async fn sync_apple_calendar(s: State<'_, AppState>, days: i64) -> CmdResult<i32> {
+async fn sync_calendar(app: AppHandle, s: State<'_, AppState>, days: i64) -> CmdResult<i32> {
     let cfg = s.cfg();
     let from = moonlock_core::today_jd(cfg.timezone);
     let mut items = Vec::new();
@@ -167,7 +184,19 @@ async fn sync_apple_calendar(s: State<'_, AppState>, days: i64) -> CmdResult<i32
             }));
         }
     }
-    sync_native(serde_json::Value::Array(items).to_string())
+    #[cfg(target_os = "android")]
+    {
+        #[derive(serde::Deserialize)]
+        struct Synced {
+            count: i32,
+        }
+        android::call::<Synced>(&app, "syncCalendar", serde_json::json!({ "items": items })).map(|r| r.count)
+    }
+    #[cfg(not(target_os = "android"))]
+    {
+        let _ = app;
+        sync_native(serde_json::Value::Array(items).to_string())
+    }
 }
 
 #[cfg(any(target_os = "macos", target_os = "ios"))]
@@ -186,9 +215,9 @@ fn sync_native(json: String) -> CmdResult<i32> {
     }
 }
 
-#[cfg(not(any(target_os = "macos", target_os = "ios")))]
+#[cfg(not(any(target_os = "macos", target_os = "ios", target_os = "android")))]
 fn sync_native(_json: String) -> CmdResult<i32> {
-    Err("Đồng bộ Apple Calendar chỉ có trên macOS và iOS — hãy dùng Export .ics.".into())
+    Err("Đồng bộ lịch chỉ có trên macOS, iOS và Android — hãy dùng Export .ics.".into())
 }
 
 // ───────────────────────────── Reminders (shared text) ─────────────────────────────
@@ -202,16 +231,25 @@ pub(crate) fn ahead_body(d: &DayInfo) -> String {
     format!("{} {} ({}/{} âm) — chuẩn bị mâm cỗ, dời lịch release.", d.weekday_name, d.date, d.lunar.day, d.lunar_month_name)
 }
 
-/// iOS: lay the system tab bar over the webview. `tabs` is `[{title, icon}]` (SF Symbol names).
+/// Mobile: lay the system tab bar over the webview. `tabs` is `[{title, icon, path}]`:
+/// iOS uses `icon` (SF Symbol name), Android draws `path` (Lucide SVG path data).
 /// Returns whether a native bar is in use, so the UI can hide its CSS one.
 #[tauri::command]
-fn native_tabbar(app: AppHandle, tabs: serde_json::Value) -> bool {
+async fn native_tabbar(app: AppHandle, tabs: serde_json::Value) -> bool {
     #[cfg(target_os = "ios")]
     {
         mobile::tabbar::install(&app, tabs.to_string());
         true
     }
-    #[cfg(not(target_os = "ios"))]
+    #[cfg(target_os = "android")]
+    {
+        #[derive(serde::Deserialize)]
+        struct Installed {
+            ok: bool,
+        }
+        android::call::<Installed>(&app, "installTabBar", serde_json::json!({ "tabs": tabs })).is_ok_and(|r| r.ok)
+    }
+    #[cfg(desktop)]
     {
         let _ = (app, tabs);
         false
@@ -219,10 +257,12 @@ fn native_tabbar(app: AppHandle, tabs: serde_json::Value) -> bool {
 }
 
 #[tauri::command]
-fn native_tab_select(app: AppHandle, index: i32) {
+async fn native_tab_select(app: AppHandle, index: i32) {
     #[cfg(target_os = "ios")]
     mobile::tabbar::select(&app, index);
-    #[cfg(not(target_os = "ios"))]
+    #[cfg(target_os = "android")]
+    let _ = android::call::<serde_json::Value>(&app, "selectTab", serde_json::json!({ "index": index }));
+    #[cfg(desktop)]
     let _ = (app, index);
 }
 
@@ -236,8 +276,11 @@ fn on_config_changed(app: &AppHandle) {
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
-    tauri::Builder::default()
-        .plugin(tauri_plugin_notification::init())
+    let builder = tauri::Builder::default()
+        .plugin(tauri_plugin_notification::init());
+    #[cfg(target_os = "android")]
+    let builder = builder.plugin(android::init());
+    builder
         .setup(|app| {
             let path = app.path().app_config_dir()?.join("moonlock.toml");
             let cfg = fs::read_to_string(&path).ok().and_then(|s| Config::from_toml(&s).ok()).unwrap_or_default();
@@ -265,7 +308,7 @@ pub fn run() {
             rules,
             export_ics,
             platform,
-            sync_apple_calendar
+            sync_calendar
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
